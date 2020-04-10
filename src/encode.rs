@@ -310,13 +310,12 @@ pub fn encoded_size(bytes_len: usize, config: Config) -> Option<usize> {
 /// Returns the number of padding bytes written.
 pub fn add_padding(input_len: usize, output: &mut [u8]) -> usize {
     let rem = input_len % 3;
-    let mut bytes_written = 0;
-    for _ in 0..((3 - rem) % 3) {
-        output[bytes_written] = b'=';
-        bytes_written += 1;
+    let padding_length = (3 - rem) % 3;
+    for byte in output[..padding_length].iter_mut() {
+        *byte = b'=';
     }
 
-    bytes_written
+    padding_length
 }
 
 #[cfg(test)]
